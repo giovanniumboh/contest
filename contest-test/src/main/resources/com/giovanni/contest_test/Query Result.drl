@@ -1,0 +1,12 @@
+package com.giovanni.contest_test;
+impoer com.prudential.contest.data.model.ContestDetail;
+
+dialect "java"
+
+query "getObjectsOfContestDetail"
+    $result: ContestDetail();
+end
+
+query "getObjectsOfPolicy"
+    $result: Policy();
+end

@@ -1,0 +1,156 @@
+//package com.giovanni.contest_test;
+//import java.util.List;
+//import java.util.Date;
+//
+//dialect "java"
+//
+//declare Test
+//	dateOne : Date
+//        dateTwo : Date
+//        sysdate : Date
+//end
+//
+//rule "Contest A"
+//	date-effective "01-Jan-2016"
+//	date-expires "01-Dec-2016"
+//	ruleflow-group "contest_pd_fsc"
+//when
+//	$contestMaster : ContestMaster( channel == "PD", reviewingFlag == "1", contestCode == "C0001") // from master contest
+//    $policy : Policy( billingChannel == $contestMaster.getChannel())
+//	$agent : Agent(agentNumber == $policy.getAgentNumber())
+//	//get contest parameter from database
+//	$contestParameter1 : ContestParameter( contestCode == $contestMaster.getContestCode(),
+//	paramCode == "PRM01", value == $agent.getAgentType())
+//	$contestParameter2 : ContestParameter( contestCode == $contestMaster.getContestCode(),
+//	paramCode == "PRM02", value == $policy.getProductCode())
+//then
+//	System.out.println("rule contest Partnership Distribution Awards Night Event fired !");
+//	ContestDetail cd = new ContestDetail();
+//	cd.setContestCode($contestMaster.getContestCode());
+//	cd.setPolicyNo($policy.getPolicyNo());
+//	cd.setAgentNumber($policy.getAgentNumber());
+//	cd.setApi($policy.getInstallmentPremium());
+//	insertLogical(cd);
+//end
+//
+//rule "Contest B"
+//	date-effective "01-Jan-2016"
+//	date-expires "01-Jun-2016"
+//	ruleflow-group "contest_pd_fsc"
+//when
+//	$contestMaster : ContestMaster( channel == "PD", reviewingFlag == "1", contestCode == "C0002" ) // from master contest
+//    $policy : Policy( billingChannel == $contestMaster.getChannel())
+//	$agent : Agent(agentNumber == $policy.getAgentNumber())
+//	//get contest parameter from database
+//	$contestParameter1 : ContestParameter( contestCode == $contestMaster.getContestCode(),
+//	paramCode == "PRM01", value == $agent.getAgentType())
+//	$contestParameter2 : ContestParameter( contestCode == $contestMaster.getContestCode(),
+//	paramCode == "PRM02", value == $policy.getProductCode())
+//then
+//	System.out.println("rule contest Premier Club Gold fired !");
+//	ContestDetail cd = new ContestDetail();
+//	cd.setContestCode($contestMaster.getContestCode());
+//	cd.setPolicyNo($policy.getPolicyNo());
+//	cd.setAgentNumber($policy.getAgentNumber());
+//	cd.setApi($policy.getInstallmentPremium());
+//	insertLogical(cd);
+//end
+//
+//rule "test"
+//ruleflow-group "coba"
+//when
+//$contestParam : ContestParameter( paramCode == "COBA", new Date() >= attribute4, new Date() <= attribute5)
+//then
+//System.out.println("rule test fired !");
+//System.out.println("sysdate : " + new Date());
+//System.out.println("date 1 : " + $contestParam.getAttribute4());
+//System.out.println("date 2 : " + $contestParam.getAttribute5());
+//end
+//
+//rule "coba"
+//ruleflow-group "coba"
+//when
+//$contestParameter1 : ContestParameter( contestCode == "C0001",
+//	paramCode == "PRM01", value in (['AM', 'SUM']))
+//then
+//System.out.println("MATCHES");
+//end
+//
+//rule "test and or"
+//ruleflow-group "coba"
+//when
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM01", operator != "TERTANGGUNG")
+//or ( $contestParameter3 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM03", operator != "TERTANGGUNG", value != "PEMEGANG_POLIS") 
+//    )
+//then
+//System.out.println("INSERT POLICY");
+//end
+//
+//rule "test and or 2"
+//ruleflow-group "coba2"
+//when
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM01", operator != "TERTANGGUNG")
+//then
+//System.out.println("RULE TEST AND OR 2 FIRED");
+//end
+//
+//rule "test and or 3"
+//ruleflow-group "coba2"
+//when
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1", 
+//        paramCode == "PRM01", operator != "TERTANGGUNG")
+//$contestParameter2 : ContestParameter( contestCode == "ANDOR1", 
+//        paramCode == "PRM02", value != "PEMEGANG_POLIS")
+//then
+//System.out.println("RULE TEST AND OR 3 FIRED");
+//end
+//
+//rule "test and or 4"
+//ruleflow-group "coba3"
+//when
+//$policy : Policy ( );
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM01", operator != $policy.ownerNumber)
+//then
+//System.out.println("Insert Policy from rule test 4");
+//System.out.println("policy " + $policy.getPolicyNo());
+//end
+//
+//rule "test and or 5"
+//ruleflow-group "coba3"
+//when
+//$policy : Policy ( );
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM01", operator != $policy.ownerNumber)
+//$contestParameter2 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM02", value != $policy.productCode)
+//then
+//System.out.println("Insert Policy from rule test 5");
+//System.out.println("policy " + $policy.getPolicyNo());
+//end
+//
+//rule "test and or 6"
+//ruleflow-group "coba4"
+//when
+//$policy : Policy ( );
+//$contestParameter1 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM01", operator == $policy.ownerNumber)
+//or ( $contestParameter3 : ContestParameter( contestCode == "ANDOR1",
+//	paramCode == "PRM03", operator == $policy.ownerNumber, value == $policy.productCode) )
+//then
+//retract ( $policy );
+//System.out.println("Policy yang masuk kriteria");
+//System.out.println("policy " + $policy.getPolicyNo());
+//end
+//
+//rule "print contest value"
+//ruleflow-group "contest"
+//when
+//$contestParameter1 : ContestParameter( contestCode == "C0001",
+//	paramCode == "PRM01")
+//then
+//System.out.println("nilai value " + $contestParameter1.getValue());
+//end
